@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about booking and our home services.</p>
+</div>
+
+<div class="container pb-5">
+    {% include "partials/search_bar.html" with show_category=True placeholder="Search FAQs..." clear_url=request.path %}
+
+    {% if faqs %}
+    <div class="accordion" id="faqAccordion">
+        {% for faq in faqs %}
+        <div class="accordion-item faq-item reveal-on-scroll">
+            <h2 class="accordion-header">
+                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ faq.pk }}">
+                    <span class="badge bg-primary bg-opacity-25 text-primary me-2">{{ faq.get_category_display }}</span>
+                    {{ faq.question }}
+                </button>
+            </h2>
+            <div id="faq{{ faq.pk }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">{{ faq.answer|linebreaks }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5 glass-panel p-5">
+        <p class="text-muted mb-3">No FAQs match your search.</p>
+        <a href="{% url 'content:faq' %}" class="btn btn-outline-light">Clear Filters</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

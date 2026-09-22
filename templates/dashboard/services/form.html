@@ -1,0 +1,18 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Service{% endblock %}
+
+{% block content %}
+<a href="{% url 'dashboard:services' %}" class="text-muted small text-decoration-none mb-3 d-inline-block"><i class="bi bi-arrow-left"></i> Back to Services</a>
+
+<h1 class="text-white fw-bold mb-4">Edit Service</h1>
+
+<div class="glass-panel p-4" style="max-width:720px;">
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary mt-2">Save Service</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Booking {{ booking.reference }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'dashboard:bookings' %}" class="text-muted small text-decoration-none mb-3 d-inline-block"><i class="bi bi-arrow-left"></i> Back to Bookings</a>
+
+<h1 class="text-white fw-bold mb-4">Booking <code>{{ booking.reference }}</code></h1>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="glass-panel p-4">
+            <h5 class="text-white mb-3">Customer</h5>
+            <p class="mb-1"><strong>Name:</strong> {{ booking.customer.name }}</p>
+            <p class="mb-1"><strong>Email:</strong> {{ booking.customer.email }}</p>
+            <p class="mb-1"><strong>Phone:</strong> {{ booking.customer.phone }}</p>
+            <hr class="border-secondary">
+            <h5 class="text-white mb-3">Appointment</h5>
+            <p class="mb-1"><strong>Service:</strong> {{ booking.service.name }}</p>
+            <p class="mb-1"><strong>Date:</strong> {{ booking.preferred_date|date:"F j, Y" }}</p>
+            <p class="mb-1"><strong>Time:</strong> {{ booking.preferred_time|time:"g:i A" }}</p>
+            <p class="mb-1"><strong>Address:</strong> {{ booking.service_address }}</p>
+            {% if booking.device_info %}<p class="mb-1"><strong>Device:</strong> {{ booking.device_info }}</p>{% endif %}
+            {% if booking.notes %}<p class="mb-0"><strong>Notes:</strong> {{ booking.notes }}</p>{% endif %}
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="glass-panel p-4">
+            <h5 class="text-white mb-3">Update Status</h5>
+            <p class="mb-3">Current: <span class="status-badge status-{{ booking.status }}">{{ booking.get_status_display }}</span></p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

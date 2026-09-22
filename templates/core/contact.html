@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contact — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+    <h1>Contact Us</h1>
+    <p>Have a question? Send us a message and we'll respond as soon as possible.</p>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-5 reveal-on-scroll">
+            <div class="glass-panel p-4 h-100">
+                <h5 class="text-white mb-4">Get in Touch</h5>
+                <ul class="list-unstyled text-muted">
+                    <li class="mb-3"><i class="bi bi-envelope me-2 text-primary"></i> info@techcare.local</li>
+                    <li class="mb-3"><i class="bi bi-telephone me-2 text-primary"></i> +63 9XX XXX XXXX</li>
+                    <li class="mb-3"><i class="bi bi-geo-alt me-2 text-primary"></i> Metro Manila, Philippines</li>
+                    <li><i class="bi bi-clock me-2 text-primary"></i> Mon–Sat, 9:00 AM – 6:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-7 reveal-on-scroll">
+            <div class="glass-panel p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="bi bi-send me-1"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Testimonials — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+    <h1>What Our Customers Say</h1>
+    <p>Real feedback from home service clients across Metro Manila.</p>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        {% for testimonial in testimonials %}
+        <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="testimonial-card p-4">
+                <div class="stars mb-2">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= testimonial.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+                <p class="text-muted mb-3">"{{ testimonial.text }}"</p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <strong class="text-white">{{ testimonial.customer_name }}</strong>
+                        {% if testimonial.location %}<br><small class="text-muted">{{ testimonial.location }}</small>{% endif %}
+                    </div>
+                    {% if testimonial.is_featured %}
+                    <span class="badge bg-primary bg-opacity-25 text-primary">Featured</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-5">No testimonials yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

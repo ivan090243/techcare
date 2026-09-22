@@ -1,0 +1,24 @@
+"""Production settings for Railway deployment."""
+
+from .base import *  # noqa: F403
+
+DEBUG = False
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")  # noqa: F405
+
+if not ALLOWED_HOSTS:
+    railway_domain = env("RAILWAY_PUBLIC_DOMAIN", default="")  # noqa: F405
+    if railway_domain:
+        ALLOWED_HOSTS = [railway_domain]
+
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])  # noqa: F405
+if not CSRF_TRUSTED_ORIGINS and ALLOWED_HOSTS:
+    CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)  # noqa: F405
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=31536000)  # noqa: F405
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

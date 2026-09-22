@@ -1,0 +1,22 @@
+New Home Service Booking — {{ site_name }}
+==========================================
+
+Reference: {{ booking.reference }}
+Status: {{ booking.get_status_display }}
+
+Customer Details
+----------------
+Name: {{ booking.customer.name }}
+Email: {{ booking.customer.email }}
+Phone: {{ booking.customer.phone }}
+
+Service Details
+---------------
+Service: {{ booking.service.name }}
+Preferred Date: {{ booking.preferred_date }}
+Preferred Time: {{ booking.preferred_time }}
+Address: {{ booking.service_address }}
+Device Info: {{ booking.device_info|default:"N/A" }}
+Notes: {{ booking.notes|default:"None" }}
+
+Log in to the admin dashboard to manage this booking.

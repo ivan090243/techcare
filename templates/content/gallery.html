@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+    <h1>Before & After Gallery</h1>
+    <p>See the difference our professional service makes.</p>
+</div>
+
+<div class="container pb-5">
+    <form method="get" class="search-bar glass-panel p-3 mb-4">
+        <div class="input-group">
+            <span class="input-group-text glass-input-addon"><i class="bi bi-search"></i></span>
+            <input type="search" name="q" class="form-control glass-input" placeholder="Search gallery..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+            {% if search_query %}<a href="{% url 'content:gallery' %}" class="btn btn-outline-light">Clear</a>{% endif %}
+        </div>
+    </form>
+
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="gallery-card p-3">
+                <div class="gallery-images mb-3">
+                    <div>
+                        <div class="gallery-label">Before</div>
+                        <img src="{{ item.before_image.url }}" alt="Before — {{ item.title }}" loading="lazy">
+                    </div>
+                    <div>
+                        <div class="gallery-label">After</div>
+                        <img src="{{ item.after_image.url }}" alt="After — {{ item.title }}" loading="lazy">
+                    </div>
+                </div>
+                <h6 class="text-white mb-1">{{ item.title }}</h6>
+                {% if item.service %}<small class="text-primary">{{ item.service.name }}</small>{% endif %}
+                {% if item.description %}<p class="text-muted small mt-2 mb-0">{{ item.description }}</p>{% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 glass-panel p-5">
+            <i class="bi bi-images display-4 text-muted mb-3 d-block"></i>
+            <p class="text-muted mb-0">Gallery items will appear here once uploaded via the admin panel.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-4 d-flex justify-content-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link glass-input" href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link glass-input" href="?page={{ page_obj.next_page_number }}&q={{ search_query }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
