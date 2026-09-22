@@ -3,7 +3,9 @@
 from .base import *  # noqa: F403
 
 DEBUG = False
-SECRET_KEY = env("SECRET_KEY")  # noqa: F405
+# The base setting provides a development fallback so a missing Vercel variable
+# does not prevent the serverless function from importing. Set SECRET_KEY in Vercel.
+SECRET_KEY = env("SECRET_KEY", default=SECRET_KEY)  # noqa: F405
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])  # noqa: F405
 
 if not ALLOWED_HOSTS:
@@ -27,5 +29,6 @@ SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)  # noqa: F40
 SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=31536000)  # noqa: F405
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
