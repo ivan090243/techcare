@@ -13,5 +13,5 @@ def send_booking_notification(booking):
         message=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[settings.ADMIN_EMAIL],
-        fail_silently=False,
+        fail_silently=settings.DEBUG,
     )
