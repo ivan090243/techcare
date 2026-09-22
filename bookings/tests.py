@@ -8,9 +8,16 @@ from services.models import DeliveryType, Service
 
 
 class BookingEmailRegressionTests(TestCase):
-    @override_settings(DEBUG=True, ALLOWED_HOSTS=["localhost", "testserver"])
-    @patch("bookings.emails.send_mail", side_effect=OSError(22, "Invalid argument"))
-    def test_booking_post_does_not_crash_when_console_email_fails(self, mock_send_mail):
+    @override_settings(
+        DEBUG=True,
+        ALLOWED_HOSTS=["localhost", "testserver"],
+        EMAIL_BACKEND="django.core.mail.backends.console.EmailBackend",
+    )
+    @patch(
+        "django.core.mail.backends.console.EmailBackend.send_messages",
+        side_effect=OSError(22, "Invalid argument"),
+    )
+    def test_booking_post_does_not_crash_when_console_email_fails(self, mock_send_messages):
         service = Service.objects.create(
             name="Laptop Cleaning",
             slug="laptop-cleaning",
@@ -39,7 +46,7 @@ class BookingEmailRegressionTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn("/book/success/", response["Location"])
         self.assertTrue(Booking.objects.filter(customer__email="regression@example.com").exists())
-        self.assertTrue(mock_send_mail.called)
+        self.assertTrue(mock_send_messages.called)
 
         Booking.objects.filter(customer__email="regression@example.com").delete()
         Customer.objects.filter(email="regression@example.com").delete()

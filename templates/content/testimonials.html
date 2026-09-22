@@ -9,6 +9,9 @@
 </div>
 
 <div class="container pb-5">
+    <div class="text-end mb-4">
+        <a href="{% url 'content:testimonial_add' %}" class="btn btn-primary">Add Testimonial</a>
+    </div>
     <div class="row g-4">
         {% for testimonial in testimonials %}
         <div class="col-md-6 col-lg-4 reveal-on-scroll">

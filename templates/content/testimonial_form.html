@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Add Testimonial — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+    <h1>Add Your Testimonial</h1>
+    <p>Share your experience and help other customers feel confident choosing TechCare.</p>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-panel p-4 p-md-5">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.customer_name.id_for_label }}" class="form-label text-white">Full Name</label>
+                            {{ form.customer_name }}
+                            {% if form.customer_name.errors %}<div class="text-danger small mt-1">{{ form.customer_name.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.location.id_for_label }}" class="form-label text-white">Location</label>
+                            {{ form.location }}
+                            {% if form.location.errors %}<div class="text-danger small mt-1">{{ form.location.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.service.id_for_label }}" class="form-label text-white">Service</label>
+                            {{ form.service }}
+                            {% if form.service.errors %}<div class="text-danger small mt-1">{{ form.service.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.rating.id_for_label }}" class="form-label text-white">Rating</label>
+                            {{ form.rating }}
+                            {% if form.rating.errors %}<div class="text-danger small mt-1">{{ form.rating.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-12">
+                            <label for="{{ form.text.id_for_label }}" class="form-label text-white">Your Review</label>
+                            {{ form.text }}
+                            {% if form.text.errors %}<div class="text-danger small mt-1">{{ form.text.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Testimonial</button>
+                        <a href="{% url 'content:testimonials' %}" class="btn btn-outline-light">Back to Reviews</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

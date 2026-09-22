@@ -1,6 +1,9 @@
+from django.contrib import messages
 from django.db.models import Q
-from django.views.generic import ListView
+from django.shortcuts import redirect, render
+from django.views.generic import CreateView, ListView
 
+from .forms import TestimonialSubmissionForm
 from .models import FAQ, FAQCategory, GalleryItem, Testimonial
 
 
@@ -34,6 +37,29 @@ class TestimonialListView(ListView):
 
     def get_queryset(self):
         return Testimonial.objects.filter(is_published=True).select_related("service")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["add_testimonial_url"] = "/testimonials/add/"
+        return context
+
+
+class TestimonialCreateView(CreateView):
+    model = Testimonial
+    form_class = TestimonialSubmissionForm
+    template_name = "content/testimonial_form.html"
+
+    def form_valid(self, form):
+        form.instance.is_published = False
+        form.instance.is_featured = False
+        messages.success(
+            self.request,
+            "Thank you for your testimonial. It has been submitted for review and will appear after approval.",
+        )
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return "/testimonials/"
 
 
 class FAQListView(ListView):
