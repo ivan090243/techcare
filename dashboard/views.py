@@ -4,13 +4,14 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, View
 
 from bookings.models import Booking, BookingStatus, Customer
+from content.models import Testimonial
 from core.models import ContactMessage
 from services.models import Service
 
-from .forms import BookingStatusForm, ServiceForm
+from .forms import BookingStatusForm, ServiceForm, TestimonialForm
 from .mixins import StaffRequiredMixin
 from .utils import export_bookings_excel
 
@@ -41,8 +42,61 @@ class DashboardHomeView(StaffRequiredMixin, ListView):
             "customers": Customer.objects.count(),
             "services": Service.objects.filter(is_active=True).count(),
             "unread_messages": ContactMessage.objects.filter(is_read=False).count(),
+            "pending_testimonials": Testimonial.objects.filter(is_published=False).count(),
         }
         return context
+
+
+class TestimonialListView(StaffRequiredMixin, ListView):
+    model = Testimonial
+    template_name = "dashboard/testimonials/list.html"
+    context_object_name = "testimonials"
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Testimonial.objects.select_related("service").order_by("-created_at")
+
+
+class TestimonialCreateView(StaffRequiredMixin, CreateView):
+    model = Testimonial
+    form_class = TestimonialForm
+    template_name = "dashboard/testimonials/form.html"
+    success_url = reverse_lazy("dashboard:testimonials")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Testimonial created successfully.")
+        return super().form_valid(form)
+
+
+class TestimonialUpdateView(StaffRequiredMixin, UpdateView):
+    model = Testimonial
+    form_class = TestimonialForm
+    template_name = "dashboard/testimonials/form.html"
+    context_object_name = "testimonial"
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard:testimonials")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Testimonial updated successfully.")
+        return super().form_valid(form)
+
+
+class TestimonialDeleteView(StaffRequiredMixin, View):
+    def post(self, request, pk):
+        testimonial = get_object_or_404(Testimonial, pk=pk)
+        testimonial.delete()
+        messages.success(request, "Testimonial deleted successfully.")
+        return redirect("dashboard:testimonials")
+
+
+class TestimonialApprovalView(StaffRequiredMixin, View):
+    def post(self, request, pk):
+        testimonial = get_object_or_404(Testimonial, pk=pk)
+        testimonial.is_published = True
+        testimonial.save(update_fields=["is_published", "updated_at"])
+        messages.success(request, "Testimonial approved and published.")
+        return redirect("dashboard:testimonials")
 
 
 class BookingListView(StaffRequiredMixin, ListView):

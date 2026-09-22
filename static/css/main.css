@@ -288,6 +288,40 @@ body {
     width: calc(100% - 260px);
 }
 
+.notification-button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.1rem;
+}
+
+.notification-count {
+    min-width: 1.25rem;
+    font-size: 0.65rem;
+}
+
+.notification-menu {
+    min-width: 300px;
+    padding: 0.35rem 0;
+    background: #102944;
+    border: 1px solid var(--tc-glass-border);
+    box-shadow: var(--tc-shadow);
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    white-space: normal;
+}
+
+.notification-item small {
+    display: block;
+    color: var(--tc-muted);
+    margin-top: 0.15rem;
+}
+
 .sidebar-link {
     display: flex;
     align-items: center;

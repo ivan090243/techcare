@@ -22,6 +22,12 @@
             </div>
             <nav>
                 <a href="{% url 'dashboard:home' %}" class="sidebar-link"><i class="bi bi-speedometer2"></i> Overview</a>
+                <a href="{% url 'dashboard:testimonials' %}" class="sidebar-link position-relative">
+                    <i class="bi bi-chat-square-quote"></i> Testimonials
+                    {% if pending_testimonials %}
+                    <span class="position-absolute top-50 end-0 translate-middle-y badge rounded-pill bg-danger">{{ pending_testimonials }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'dashboard:bookings' %}" class="sidebar-link"><i class="bi bi-calendar-event"></i> Bookings</a>
                 <a href="{% url 'dashboard:customers' %}" class="sidebar-link"><i class="bi bi-people"></i> Customers</a>
                 <a href="{% url 'dashboard:services' %}" class="sidebar-link"><i class="bi bi-tools"></i> Services</a>
@@ -38,7 +44,36 @@
         </aside>
 
         <main class="dashboard-main">
-            <button class="btn btn-outline-light d-lg-none mb-3" id="sidebarToggle"><i class="bi bi-list"></i> Menu</button>
+            <div class="dashboard-toolbar d-flex justify-content-between align-items-center mb-4">
+                <button class="btn btn-outline-light d-lg-none" id="sidebarToggle"><i class="bi bi-list"></i> Menu</button>
+                <div class="dropdown ms-auto">
+                    <button class="notification-button btn btn-outline-light position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                        <i class="bi bi-bell{% if pending_testimonials %}-fill{% endif %}"></i>
+                        {% if pending_testimonials %}
+                        <span class="notification-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ pending_testimonials }}</span>
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end notification-menu">
+                        <div class="d-flex justify-content-between align-items-center px-3 py-2">
+                            <strong>Notifications</strong>
+                            {% if pending_testimonials %}<span class="text-muted small">{{ pending_testimonials }} pending</span>{% endif %}
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        {% for testimonial in pending_testimonial_items %}
+                        <a class="dropdown-item notification-item" href="{% url 'dashboard:testimonials' %}">
+                            <i class="bi bi-chat-square-quote text-info"></i>
+                            <span><strong>{{ testimonial.customer_name }}</strong><small>New testimonial awaiting approval</small></span>
+                        </a>
+                        {% empty %}
+                        <span class="dropdown-item-text text-muted py-3">No pending notifications.</span>
+                        {% endfor %}
+                        {% if pending_testimonials %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-primary" href="{% url 'dashboard:testimonials' %}">Review all testimonials</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }} glass-alert alert-dismissible fade show">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>

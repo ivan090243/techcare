@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+  {% if object %}Edit Testimonial{% else %}Add Testimonial{% endif %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'dashboard:testimonials' %}" class="text-muted small text-decoration-none mb-3 d-inline-block"><i class="bi bi-arrow-left"></i> Back to Testimonials</a>
+
+<h1 class="text-white fw-bold mb-4">
+  {% if object %}Edit Testimonial{% else %}Add Testimonial{% endif %}
+</h1>
+
+<div class="glass-panel p-4" style="max-width: 720px;">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                {{ form.customer_name.label_tag }}
+                {{ form.customer_name }}
+            </div>
+            <div class="col-md-6">
+                {{ form.location.label_tag }}
+                {{ form.location }}
+            </div>
+            <div class="col-md-6">
+                {{ form.service.label_tag }}
+                {{ form.service }}
+            </div>
+            <div class="col-md-6">
+                {{ form.rating.label_tag }}
+                {{ form.rating }}
+            </div>
+            <div class="col-12">
+                {{ form.text.label_tag }}
+                {{ form.text }}
+            </div>
+            <div class="col-12 d-flex gap-3">
+                <div class="form-check">
+                    {{ form.is_featured }}
+                    <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">Featured</label>
+                </div>
+                <div class="form-check">
+                    {{ form.is_published }}
+                    <label class="form-check-label" for="{{ form.is_published.id_for_label }}">Published</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Testimonial</button>
+            <a href="{% url 'dashboard:testimonials' %}" class="btn btn-outline-light">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
