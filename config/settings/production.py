@@ -1,14 +1,21 @@
-"""Production settings for Railway deployment."""
+"""Production settings for Railway and Vercel deployments."""
 
 from .base import *  # noqa: F403
 
 DEBUG = False
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")  # noqa: F405
+SECRET_KEY = env("SECRET_KEY")  # noqa: F405
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])  # noqa: F405
 
 if not ALLOWED_HOSTS:
     railway_domain = env("RAILWAY_PUBLIC_DOMAIN", default="")  # noqa: F405
     if railway_domain:
         ALLOWED_HOSTS = [railway_domain]
+
+vercel_domains = [  # noqa: F405
+    env("VERCEL_URL", default=""),
+    env("VERCEL_PROJECT_PRODUCTION_URL", default=""),
+]
+ALLOWED_HOSTS.extend(domain for domain in vercel_domains if domain and domain not in ALLOWED_HOSTS)
 
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])  # noqa: F405
 if not CSRF_TRUSTED_ORIGINS and ALLOWED_HOSTS:

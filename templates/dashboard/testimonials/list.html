@@ -3,16 +3,16 @@
 {% block title %}Testimonials{% endblock %}
 
 {% block content %}
-<h1 class="text-white fw-bold mb-4">Testimonials</h1>
-
-<div class="d-flex justify-content-end mb-3">
-    <a href="{% url 'dashboard:testimonial_create' %}" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> Add Testimonial
-    </a>
+<div class="dashboard-page-header">
+    <div>
+        <p class="dashboard-eyebrow mb-1">Customer feedback</p>
+        <h1 class="text-white fw-bold mb-0">Testimonials</h1>
+    </div>
+    <span class="text-muted small">Approve or remove submitted reviews</span>
 </div>
 
-<div class="table-glass">
-    <table class="table table-hover mb-0">
+<div class="table-glass table-responsive">
+    <table class="table table-hover align-middle mb-0 testimonials-table">
         <thead>
             <tr>
                 <th>Customer</th>
@@ -20,7 +20,7 @@
                 <th>Rating</th>
                 <th>Review</th>
                 <th>Status</th>
-                <th></th>
+                <th class="text-end">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
                 <td>{{ testimonial.customer_name }}</td>
                 <td>{{ testimonial.location|default:"—" }}</td>
                 <td>{{ testimonial.rating }}★</td>
-                <td>{{ testimonial.text|truncatechars:90 }}</td>
+                <td class="review-cell">{{ testimonial.text|truncatechars:90 }}</td>
                 <td>
                     {% if testimonial.is_published %}
                     <span class="status-badge status-confirmed">Published</span>
@@ -37,25 +37,24 @@
                     <span class="status-badge status-pending">Pending</span>
                     {% endif %}
                 </td>
-                <td>
+                <td class="text-end">
+                    <div class="testimonial-actions">
                     {% if not testimonial.is_published %}
                     <form method="post" action="{% url 'dashboard:testimonial_approve' testimonial.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-primary">Approve</button>
                     </form>
                     {% endif %}
-                    <div class="d-flex gap-2 mt-2">
-                        <a href="{% url 'dashboard:testimonial_edit' testimonial.pk %}" class="btn btn-sm btn-outline-light">Edit</a>
-                        <form method="post" action="{% url 'dashboard:testimonial_delete' testimonial.pk %}" onsubmit="return confirm('Delete this testimonial?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                        </form>
+                    <form method="post" action="{% url 'dashboard:testimonial_delete' testimonial.pk %}" onsubmit="return confirm('Delete this testimonial?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
                     </div>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6" class="text-center text-muted py-4">No testimonial submissions yet.</td>
+                <td colspan="6" class="text-center text-muted py-5">No testimonial submissions yet.</td>
             </tr>
             {% endfor %}
         </tbody>

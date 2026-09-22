@@ -339,6 +339,22 @@ body {
     border-right: 3px solid var(--tc-primary);
 }
 
+.dashboard-page-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-eyebrow {
+    color: var(--tc-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
 .stat-card { padding: 1.5rem; text-align: center; }
 .stat-card .stat-value { font-size: 2rem; font-weight: 700; color: #fff; }
 .stat-card .stat-label { color: var(--tc-muted); font-size: 0.875rem; }
@@ -355,6 +371,12 @@ body {
 .table-glass thead { background: rgba(255, 255, 255, 0.04); }
 .table-glass th { border-color: var(--tc-glass-border) !important; color: var(--tc-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .table-glass td { border-color: var(--tc-glass-border) !important; vertical-align: middle; }
+
+.testimonials-table { min-width: 760px; }
+.testimonials-table th, .testimonials-table td { padding: 1rem 1.25rem; }
+.review-cell { max-width: 28rem; color: #cbd5e1; }
+.testimonial-actions { display: inline-flex; align-items: center; justify-content: flex-end; gap: 0.5rem; }
+.testimonial-actions form { margin: 0; }
 
 .status-badge { font-size: 0.75rem; font-weight: 600; padding: 0.35em 0.75em; border-radius: 50px; }
 .status-pending { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
@@ -399,5 +421,8 @@ body {
 }
 
 @media (max-width: 576px) {
+    .dashboard-page-header { align-items: flex-start; flex-direction: column; }
+    .dashboard-main { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .testimonials-table th, .testimonials-table td { padding: 0.8rem; }
     .hero-section { padding: 3rem 0 2rem; }
 }

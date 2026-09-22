@@ -1,29 +1,7 @@
 from django import forms
 
 from bookings.models import Booking, BookingStatus
-from content.models import Testimonial
 from services.models import Service
-
-
-class TestimonialForm(forms.ModelForm):
-    class Meta:
-        model = Testimonial
-        fields = [
-            "customer_name",
-            "location",
-            "service",
-            "rating",
-            "text",
-            "is_featured",
-            "is_published",
-        ]
-        widgets = {
-            "location": forms.TextInput(attrs={"class": "form-control"}),
-            "customer_name": forms.TextInput(attrs={"class": "form-control"}),
-            "service": forms.Select(attrs={"class": "form-select"}),
-            "rating": forms.Select(attrs={"class": "form-select"}, choices=[(i, f"{i} star{'s' if i != 1 else ''}") for i in range(1, 6)]),
-            "text": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
-        }
 
 
 class BookingStatusForm(forms.ModelForm):

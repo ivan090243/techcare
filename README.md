@@ -64,6 +64,24 @@ techcare/
 3. Deploy — migrations run via `railway.toml` start command
 4. Run once: `python manage.py seed_data && python manage.py create_admin`
 
+## Vercel Deployment
+
+Vercel runs Django as a serverless function. Use a hosted PostgreSQL database for production; Vercel storage is not persistent, so do not use SQLite there.
+
+1. Import this repository into Vercel. The included `vercel.json` configures the Django function and static file collection.
+2. Set these environment variables in the Vercel project:
+   - `DJANGO_SETTINGS_MODULE=config.settings.production`
+   - `SECRET_KEY` — long random string
+   - `DATABASE_URL` — hosted PostgreSQL connection URL
+   - `ALLOWED_HOSTS` — your custom domain, if applicable
+   - `CSRF_TRUSTED_ORIGINS` — for example `https://your-domain.com`
+   - `ADMIN_EMAIL`, `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`
+3. Deploy. Vercel automatically provides `VERCEL_URL`; the production settings use it for host validation.
+4. Run migrations and seed data from a local shell using the production environment variables, or through your database provider's deployment command:
+   `python manage.py migrate && python manage.py seed_data && python manage.py create_admin`
+
+The public site will be available at the Vercel deployment URL after the build completes.
+
 ## Future-Ready Architecture
 
 Models include extensible fields for:

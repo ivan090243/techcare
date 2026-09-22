@@ -42,52 +42,15 @@ class DashboardTestimonialApprovalTests(TestCase):
         testimonial.refresh_from_db()
         self.assertTrue(testimonial.is_published)
 
-    def test_dashboard_can_create_testimonial(self):
-        response = self.client.post(
-            "/dashboard/testimonials/create/",
-            {
-                "customer_name": "New Customer",
-                "location": "Cebu City",
-                "rating": 5,
-                "text": "Fast and reliable service.",
-                "is_featured": "on",
-                "is_published": "on",
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(
-            Testimonial.objects.filter(
-                customer_name="New Customer",
-                text="Fast and reliable service.",
-            ).exists()
-        )
-
-    def test_dashboard_can_update_and_delete_testimonial(self):
+    def test_dashboard_can_delete_testimonial(self):
         testimonial = Testimonial.objects.create(
-            customer_name="Old Name",
-            location="Manila",
+            customer_name="Delete Me",
             rating=3,
-            text="Old review",
+            text="Remove this review",
             is_published=False,
         )
 
-        response = self.client.post(
-            f"/dashboard/testimonials/{testimonial.pk}/edit/",
-            {
-                "customer_name": "Updated Name",
-                "location": "Davao",
-                "rating": 4,
-                "text": "Updated review",
-                "is_featured": "on",
-                "is_published": "on",
-            },
-        )
+        response = self.client.post(f"/dashboard/testimonials/{testimonial.pk}/delete/")
 
         self.assertEqual(response.status_code, 302)
-        testimonial.refresh_from_db()
-        self.assertEqual(testimonial.customer_name, "Updated Name")
-
-        delete_response = self.client.post(f"/dashboard/testimonials/{testimonial.pk}/delete/")
-        self.assertEqual(delete_response.status_code, 302)
         self.assertFalse(Testimonial.objects.filter(pk=testimonial.pk).exists())
