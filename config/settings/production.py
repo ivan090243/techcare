@@ -30,5 +30,6 @@ SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=31536000)  # noqa: 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
