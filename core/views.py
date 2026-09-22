@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import OperationalError
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
@@ -14,7 +15,11 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["featured_services"] = Service.objects.filter(is_active=True)[:6]
+        try:
+            context["featured_services"] = Service.objects.filter(is_active=True)[:6]
+            list(context["featured_services"])
+        except OperationalError:
+            context["featured_services"] = []
         return context
 
 
